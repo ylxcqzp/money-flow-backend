@@ -5,7 +5,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/money-flow?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: qq123456
 
 server:
   port: 8081
@@ -19,3 +19,9 @@ mybatis-plus:
       logic-delete-field: delFlag
       logic-delete-value: 1
       logic-not-delete-value: 0
+
+security:
+  jwt:
+    secret: "money-flow-backend-secret-key-2026-02-04"
+    expire-minutes: 120
+    issuer: "money-flow-backend"
