@@ -34,4 +34,9 @@ public interface AuthService {
      * @return 当前用户信息
      */
     AuthMeResponse currentUser(SysUserDetails userDetails);
+
+    /**
+     * 退出登录
+     */
+    void logout();
 }

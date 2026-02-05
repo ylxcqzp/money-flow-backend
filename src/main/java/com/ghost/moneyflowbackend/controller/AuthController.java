@@ -65,4 +65,16 @@ public class AuthController {
     public Result<AuthMeResponse> me(@AuthenticationPrincipal SysUserDetails userDetails) {
         return Result.ok(authService.currentUser(userDetails));
     }
+
+    /**
+     * 退出登录
+     *
+     * @return 退出登录结果
+     */
+    @Operation(summary = "退出登录")
+    @PostMapping("/logout")
+    public Result<Void> logout() {
+        authService.logout();
+        return Result.ok(null);
+    }
 }

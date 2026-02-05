@@ -73,6 +73,18 @@
   }
   ```
 
+### 1.4 退出登录
+- **URL**: `/auth/logout`
+- **Method**: `POST`
+- **描述**: 清除服务端 Session 或记录 Token 失效（可选）。
+- **Response**:
+  ```json
+  {
+    "code": 200,
+    "msg": "success"
+  }
+  ```
+
 ---
 
 ## 2. 账户 (Account)

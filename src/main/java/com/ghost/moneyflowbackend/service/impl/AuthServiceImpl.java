@@ -63,8 +63,8 @@ public class AuthServiceImpl implements AuthService {
         log.info("开始处理登录请求，邮箱: {}", email);
         try {
             // 构造认证请求对象，交由 Spring Security 校验账号密码
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(email, request.getPassword());
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,
+                    request.getPassword());
             authenticationManager.authenticate(authenticationToken);
         } catch (AuthenticationException ex) {
             // 统一转为业务异常，避免暴露认证细节
@@ -136,6 +136,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
+     * 退出登录
+     */
+    @Override
+    public void logout() {
+        // JWT 是无状态的，无需服务端维护会话
+        // 可以在此记录登出日志，用于统计或审计
+        log.info("用户退出登录");
+    }
+
+    /**
      * 根据邮箱查询有效用户
      *
      * @param email 邮箱
@@ -176,7 +186,7 @@ public class AuthServiceImpl implements AuthService {
     /**
      * 构建登录响应对象
      *
-     * @param user 用户实体
+     * @param user  用户实体
      * @param token JWT Token
      * @return 登录响应
      */
