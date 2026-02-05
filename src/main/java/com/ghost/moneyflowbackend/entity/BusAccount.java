@@ -59,6 +59,11 @@ public class BusAccount {
     private Integer sortOrder;
 
     /**
+     * 是否系统默认(0:否,1:是)
+     */
+    private Integer isSystem;
+
+    /**
      * 删除标志
      */
     @TableLogic

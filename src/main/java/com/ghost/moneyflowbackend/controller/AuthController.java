@@ -1,7 +1,6 @@
 package com.ghost.moneyflowbackend.controller;
 
 import com.ghost.moneyflowbackend.common.model.Result;
-import com.ghost.moneyflowbackend.common.security.SysUserDetails;
 import com.ghost.moneyflowbackend.model.dto.AuthLoginRequest;
 import com.ghost.moneyflowbackend.model.dto.AuthRegisterRequest;
 import com.ghost.moneyflowbackend.model.vo.AuthLoginResponse;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,13 +55,12 @@ public class AuthController {
     /**
      * 获取当前用户信息
      *
-     * @param userDetails 当前认证用户
      * @return 当前用户信息
      */
     @Operation(summary = "获取当前用户信息")
     @GetMapping("/me")
-    public Result<AuthMeResponse> me(@AuthenticationPrincipal SysUserDetails userDetails) {
-        return Result.ok(authService.currentUser(userDetails));
+    public Result<AuthMeResponse> me() {
+        return Result.ok(authService.currentUser());
     }
 
     /**

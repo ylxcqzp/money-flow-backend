@@ -1,6 +1,5 @@
 package com.ghost.moneyflowbackend.service;
 
-import com.ghost.moneyflowbackend.common.security.SysUserDetails;
 import com.ghost.moneyflowbackend.model.dto.AuthLoginRequest;
 import com.ghost.moneyflowbackend.model.dto.AuthRegisterRequest;
 import com.ghost.moneyflowbackend.model.vo.AuthLoginResponse;
@@ -30,10 +29,9 @@ public interface AuthService {
     /**
      * 获取当前用户信息
      *
-     * @param userDetails 认证用户详情
      * @return 当前用户信息
      */
-    AuthMeResponse currentUser(SysUserDetails userDetails);
+    AuthMeResponse currentUser();
 
     /**
      * 退出登录

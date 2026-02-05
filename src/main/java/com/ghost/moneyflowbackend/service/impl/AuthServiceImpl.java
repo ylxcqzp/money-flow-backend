@@ -12,7 +12,9 @@ import com.ghost.moneyflowbackend.model.dto.AuthRegisterRequest;
 import com.ghost.moneyflowbackend.model.vo.AuthLoginResponse;
 import com.ghost.moneyflowbackend.model.vo.AuthMeResponse;
 import com.ghost.moneyflowbackend.model.vo.AuthUserVO;
+import com.ghost.moneyflowbackend.common.utils.SecurityUtils;
 import com.ghost.moneyflowbackend.service.AuthService;
+import com.ghost.moneyflowbackend.service.DefaultDataInitializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,6 +52,11 @@ public class AuthServiceImpl implements AuthService {
      * JWT 服务
      */
     private final JwtService jwtService;
+
+    /**
+     * 默认数据初始化服务
+     */
+    private final DefaultDataInitializer defaultDataInitializer;
 
     /**
      * 用户登录
@@ -111,6 +118,7 @@ public class AuthServiceImpl implements AuthService {
             log.error("注册失败，用户插入异常，邮箱: {}", email);
             throw new BusinessException(ErrorCode.INTERNAL_ERROR, "注册失败，请稍后重试");
         }
+        defaultDataInitializer.initializeDefaultData(user.getId());
         // 注册成功后直接签发 Token，实现注册即登录
         String token = jwtService.generateToken(user);
         log.info("注册成功，用户ID: {}", user.getId());
@@ -120,18 +128,13 @@ public class AuthServiceImpl implements AuthService {
     /**
      * 获取当前用户信息
      *
-     * @param userDetails 认证用户详情
      * @return 当前用户信息
      */
     @Override
-    public AuthMeResponse currentUser(SysUserDetails userDetails) {
-        if (userDetails == null) {
-            log.warn("获取当前用户信息失败，认证信息为空");
-            throw new BusinessException(ErrorCode.UNAUTHORIZED, "未登录或登录已失效");
-        }
-        // 从认证信息中获取用户实体并转换为视图对象
+    public AuthMeResponse currentUser() {
+        // 从安全上下文中获取当前用户信息
         AuthMeResponse response = new AuthMeResponse();
-        response.setUser(buildUserVO(userDetails.getUser()));
+        response.setUser(buildUserVO(SecurityUtils.getCurrentUser()));
         return response;
     }
 
