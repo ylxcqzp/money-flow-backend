@@ -76,9 +76,6 @@ public class DefaultDataInitializer {
         account.setIsSystem(1);
         account.setDelFlag(0);
         account.setCreateBy(userId);
-        account.setCreateTime(LocalDateTime.now());
-        account.setUpdateBy(userId);
-        account.setUpdateTime(LocalDateTime.now());
         return account;
     }
 
@@ -128,9 +125,6 @@ public class DefaultDataInitializer {
         category.setSortOrder(order);
         category.setDelFlag(0);
         category.setCreateBy(userId);
-        category.setCreateTime(LocalDateTime.now());
-        category.setUpdateBy(userId);
-        category.setUpdateTime(LocalDateTime.now());
         return category;
     }
 }

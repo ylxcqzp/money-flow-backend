@@ -84,11 +84,6 @@ public class BusCategoryServiceImpl extends ServiceImpl<BusCategoryMapper, BusCa
         category.setIcon(request.getIcon());
         category.setParentId(request.getParentId());
         category.setSortOrder(request.getSortOrder());
-        category.setDelFlag(0);
-        category.setCreateBy(userId);
-        category.setCreateTime(LocalDateTime.now());
-        category.setUpdateBy(userId);
-        category.setUpdateTime(LocalDateTime.now());
         boolean saved = save(category);
         if (!saved || category.getId() == null) {
             log.error("创建分类失败，用户ID: {}", userId);
@@ -132,8 +127,6 @@ public class BusCategoryServiceImpl extends ServiceImpl<BusCategoryMapper, BusCa
         if (request.getSortOrder() != null) {
             category.setSortOrder(request.getSortOrder());
         }
-        category.setUpdateBy(userId);
-        category.setUpdateTime(LocalDateTime.now());
         boolean updated = updateById(category);
         if (!updated) {
             log.error("更新分类失败，用户ID: {}, 分类ID: {}", userId, categoryId);

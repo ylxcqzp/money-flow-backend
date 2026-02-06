@@ -109,9 +109,6 @@ public class AuthServiceImpl implements AuthService {
         // 明文密码必须加密后落库
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         user.setStatus(0);
-        user.setDelFlag(0);
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateTime(LocalDateTime.now());
         int inserted = sysUserMapper.insert(user);
         // 插入失败时直接抛出异常，避免产生脏数据
         if (inserted != 1 || user.getId() == null) {

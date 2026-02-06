@@ -19,8 +19,12 @@ public class TransactionCreateRequest {
     @DecimalMin(value = "0.01", message = "金额必须大于0")
     private BigDecimal amount;
 
+    private String currency;
+
+    private BigDecimal originalAmount;
+
     @NotNull(message = "发生时间不能为空")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime date;
 
     private Long categoryId;

@@ -81,6 +81,7 @@ CREATE TABLE `bus_account` (
   `icon` VARCHAR(50) DEFAULT 'Wallet' COMMENT '图标名称',
   `initial_balance` DECIMAL(15, 2) NOT NULL DEFAULT 0.00 COMMENT '初始余额',
   `sort_order` INT DEFAULT 0 COMMENT '排序权重',
+  `is_system` INT DEFAULT 0 COMMENT '是否系统默认(0:否,1:是)',
   `del_flag` TINYINT(1) DEFAULT 0 COMMENT '删除标志',
   `create_by` BIGINT DEFAULT NULL COMMENT '创建者',
   `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

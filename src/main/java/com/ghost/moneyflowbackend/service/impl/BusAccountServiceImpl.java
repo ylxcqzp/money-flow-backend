@@ -57,11 +57,6 @@ public class BusAccountServiceImpl extends ServiceImpl<BusAccountMapper, BusAcco
         account.setIcon(request.getIcon());
         account.setInitialBalance(request.getInitialBalance());
         account.setSortOrder(request.getSortOrder());
-        account.setDelFlag(0);
-        account.setCreateBy(userId);
-        account.setCreateTime(LocalDateTime.now());
-        account.setUpdateBy(userId);
-        account.setUpdateTime(LocalDateTime.now());
         boolean saved = save(account);
         if (!saved || account.getId() == null) {
             log.error("创建账户失败，用户ID: {}", userId);
@@ -95,8 +90,6 @@ public class BusAccountServiceImpl extends ServiceImpl<BusAccountMapper, BusAcco
         if (request.getSortOrder() != null) {
             account.setSortOrder(request.getSortOrder());
         }
-        account.setUpdateBy(userId);
-        account.setUpdateTime(LocalDateTime.now());
         boolean updated = updateById(account);
         if (!updated) {
             log.error("更新账户失败，用户ID: {}, 账户ID: {}", userId, accountId);

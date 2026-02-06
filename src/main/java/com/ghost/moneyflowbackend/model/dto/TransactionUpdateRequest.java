@@ -11,7 +11,7 @@ import java.util.List;
 public class TransactionUpdateRequest {
     private String type;
     private BigDecimal amount;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime date;
     private Long categoryId;
     private Long accountId;

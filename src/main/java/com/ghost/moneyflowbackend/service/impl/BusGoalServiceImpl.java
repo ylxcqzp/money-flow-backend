@@ -65,11 +65,6 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
         goal.setIcon(request.getIcon());
         goal.setColor(request.getColor());
         goal.setStatus("ongoing");
-        goal.setDelFlag(0);
-        goal.setCreateBy(userId);
-        goal.setCreateTime(LocalDateTime.now());
-        goal.setUpdateBy(userId);
-        goal.setUpdateTime(LocalDateTime.now());
         boolean saved = save(goal);
         if (!saved || goal.getId() == null) {
             log.error("创建目标失败，用户ID: {}", userId);
@@ -112,8 +107,6 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
             validateStatus(request.getStatus());
             goal.setStatus(request.getStatus());
         }
-        goal.setUpdateBy(userId);
-        goal.setUpdateTime(LocalDateTime.now());
         boolean updated = updateById(goal);
         if (!updated) {
             log.error("更新目标失败，用户ID: {}, 目标ID: {}", userId, goalId);
@@ -154,8 +147,6 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
         if (goal.getTargetAmount() != null && newAmount.compareTo(goal.getTargetAmount()) >= 0) {
             goal.setStatus("completed");
         }
-        goal.setUpdateBy(userId);
-        goal.setUpdateTime(LocalDateTime.now());
         boolean updated = updateById(goal);
         if (!updated) {
             log.error("更新目标金额失败，用户ID: {}, 目标ID: {}", userId, goalId);
@@ -166,8 +157,6 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
         record.setAmount(request.getAmount());
         LocalDate operateDate = request.getOperateDate() == null ? LocalDate.now() : request.getOperateDate();
         record.setOperateDate(operateDate);
-        record.setCreateBy(userId);
-        record.setCreateTime(LocalDateTime.now());
         int inserted = busGoalRecordMapper.insert(record);
         if (inserted != 1 || record.getId() == null) {
             log.error("创建目标记录失败，用户ID: {}, 目标ID: {}", userId, goalId);

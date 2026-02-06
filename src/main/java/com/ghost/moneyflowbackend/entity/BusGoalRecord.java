@@ -1,6 +1,8 @@
 package com.ghost.moneyflowbackend.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -44,10 +46,12 @@ public class BusGoalRecord {
     /**
      * 操作人
      */
+    @TableField(fill = FieldFill.INSERT)
     private Long createBy;
 
     /**
      * 记录时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 }

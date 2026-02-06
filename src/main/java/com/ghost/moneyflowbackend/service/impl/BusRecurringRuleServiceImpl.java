@@ -34,7 +34,8 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class BusRecurringRuleServiceImpl extends ServiceImpl<BusRecurringRuleMapper, BusRecurringRule> implements BusRecurringRuleService {
+public class BusRecurringRuleServiceImpl extends ServiceImpl<BusRecurringRuleMapper, BusRecurringRule>
+        implements BusRecurringRuleService {
     private final BusAccountMapper busAccountMapper;
     private final BusCategoryMapper busCategoryMapper;
     private final BusTransactionMapper busTransactionMapper;
@@ -75,11 +76,6 @@ public class BusRecurringRuleServiceImpl extends ServiceImpl<BusRecurringRuleMap
         rule.setStartDate(request.getStartDate());
         rule.setNextExecutionDate(nextExecutionDate);
         rule.setStatus(request.getStatus() == null ? 0 : request.getStatus());
-        rule.setDelFlag(0);
-        rule.setCreateBy(userId);
-        rule.setCreateTime(LocalDateTime.now());
-        rule.setUpdateBy(userId);
-        rule.setUpdateTime(LocalDateTime.now());
         boolean saved = save(rule);
         if (!saved || rule.getId() == null) {
             log.error("创建周期性规则失败，用户ID: {}", userId);
@@ -124,8 +120,6 @@ public class BusRecurringRuleServiceImpl extends ServiceImpl<BusRecurringRuleMap
         LocalDate nextExecutionDate = calculateNextExecutionDate(rule.getStartDate(), rule.getFrequency());
         rule.setNextExecutionDate(nextExecutionDate);
         rule.setType(type);
-        rule.setUpdateBy(userId);
-        rule.setUpdateTime(LocalDateTime.now());
         boolean updated = updateById(rule);
         if (!updated) {
             log.error("更新周期性规则失败，用户ID: {}, 规则ID: {}", userId, ruleId);
@@ -173,19 +167,12 @@ public class BusRecurringRuleServiceImpl extends ServiceImpl<BusRecurringRuleMap
             transaction.setAccountId(account.getId());
             transaction.setTargetAccountId(null);
             transaction.setNote("周期性账单");
-            transaction.setDelFlag(0);
-            transaction.setCreateBy(userId);
-            transaction.setCreateTime(LocalDateTime.now());
-            transaction.setUpdateBy(userId);
-            transaction.setUpdateTime(LocalDateTime.now());
             int inserted = busTransactionMapper.insert(transaction);
             if (inserted == 1 && transaction.getId() != null) {
                 generatedTransactions.add(toTransactionVO(transaction));
             }
             LocalDate nextExecutionDate = calculateNextExecutionDate(rule.getNextExecutionDate(), rule.getFrequency());
             rule.setNextExecutionDate(nextExecutionDate);
-            rule.setUpdateBy(userId);
-            rule.setUpdateTime(LocalDateTime.now());
             updateById(rule);
         }
         return generatedTransactions;
@@ -240,7 +227,8 @@ public class BusRecurringRuleServiceImpl extends ServiceImpl<BusRecurringRuleMap
         if (!StringUtils.hasText(frequency)) {
             throw new BusinessException(ErrorCode.INVALID_PARAM, "频率不能为空");
         }
-        if (!"daily".equals(frequency) && !"weekly".equals(frequency) && !"monthly".equals(frequency) && !"yearly".equals(frequency)) {
+        if (!"daily".equals(frequency) && !"weekly".equals(frequency) && !"monthly".equals(frequency)
+                && !"yearly".equals(frequency)) {
             throw new BusinessException(ErrorCode.INVALID_PARAM, "频率不合法");
         }
     }

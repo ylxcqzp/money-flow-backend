@@ -44,7 +44,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper, BusTransaction> implements BusTransactionService {
+public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper, BusTransaction>
+        implements BusTransactionService {
     private final BusAccountMapper busAccountMapper;
     private final BusCategoryMapper busCategoryMapper;
     private final BusTransactionTagMapper busTransactionTagMapper;
@@ -52,7 +53,7 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
 
     @Override
     public List<TransactionVO> listTransactions(LocalDateTime startDate, LocalDateTime endDate, String type,
-                                                Long categoryId, Long accountId, List<String> tags) {
+            Long categoryId, Long accountId, List<String> tags) {
         Long userId = SecurityUtils.getCurrentUserId();
         LambdaQueryWrapper<BusTransaction> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(BusTransaction::getUserId, userId)
@@ -144,16 +145,13 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         transaction.setUserId(userId);
         transaction.setType(type);
         transaction.setAmount(request.getAmount());
+        transaction.setCurrency(request.getCurrency());
+        transaction.setOrigAmount(request.getOriginalAmount());
         transaction.setDate(request.getDate());
         transaction.setCategoryId(category == null ? null : category.getId());
         transaction.setAccountId(account.getId());
         transaction.setTargetAccountId(targetAccountId);
         transaction.setNote(request.getNote());
-        transaction.setDelFlag(0);
-        transaction.setCreateBy(userId);
-        transaction.setCreateTime(LocalDateTime.now());
-        transaction.setUpdateBy(userId);
-        transaction.setUpdateTime(LocalDateTime.now());
         boolean saved = save(transaction);
         if (!saved || transaction.getId() == null) {
             log.error("创建交易失败，用户ID: {}", userId);
@@ -188,7 +186,8 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         Long accountId = request.getAccountId() != null ? request.getAccountId() : transaction.getAccountId();
         BusAccount account = getAccount(userId, accountId);
         transaction.setAccountId(account.getId());
-        Long targetAccountId = request.getTargetAccountId() != null ? request.getTargetAccountId() : transaction.getTargetAccountId();
+        Long targetAccountId = request.getTargetAccountId() != null ? request.getTargetAccountId()
+                : transaction.getTargetAccountId();
         if ("transfer".equals(type)) {
             if (targetAccountId == null) {
                 throw new BusinessException(ErrorCode.INVALID_PARAM, "转账必须指定目标账户");
@@ -212,8 +211,6 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
             transaction.setNote(request.getNote());
         }
         transaction.setType(type);
-        transaction.setUpdateBy(userId);
-        transaction.setUpdateTime(LocalDateTime.now());
         boolean updated = updateById(transaction);
         if (!updated) {
             log.error("更新交易失败，用户ID: {}, 交易ID: {}", userId, transactionId);
@@ -330,9 +327,6 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
                 BusTag newTag = new BusTag();
                 newTag.setUserId(userId);
                 newTag.setName(name);
-                newTag.setDelFlag(0);
-                newTag.setCreateBy(userId);
-                newTag.setCreateTime(now);
                 int inserted = busTagMapper.insert(newTag);
                 if (inserted != 1 || newTag.getId() == null) {
                     log.error("创建标签失败，用户ID: {}, 标签名: {}", userId, name);

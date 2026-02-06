@@ -74,11 +74,6 @@ public class BusBudgetServiceImpl extends ServiceImpl<BusBudgetMapper, BusBudget
             budget.setUserId(userId);
             budget.setMonth(month);
             budget.setTotalAmount(request.getTotal());
-            budget.setDelFlag(0);
-            budget.setCreateBy(userId);
-            budget.setCreateTime(now);
-            budget.setUpdateBy(userId);
-            budget.setUpdateTime(now);
             boolean saved = save(budget);
             if (!saved || budget.getId() == null) {
                 log.error("创建预算失败，用户ID: {}, 月份: {}", userId, month);
@@ -86,8 +81,6 @@ public class BusBudgetServiceImpl extends ServiceImpl<BusBudgetMapper, BusBudget
             }
         } else {
             budget.setTotalAmount(request.getTotal());
-            budget.setUpdateBy(userId);
-            budget.setUpdateTime(now);
             boolean updated = updateById(budget);
             if (!updated) {
                 log.error("更新预算失败，用户ID: {}, 月份: {}", userId, month);
@@ -153,7 +146,6 @@ public class BusBudgetServiceImpl extends ServiceImpl<BusBudgetMapper, BusBudget
             item.setBudgetId(budgetId);
             item.setCategoryId(categoryId);
             item.setAmount(amount);
-            item.setDelFlag(0);
             busBudgetItemMapper.insert(item);
         }
     }

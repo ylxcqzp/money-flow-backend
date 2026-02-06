@@ -1,6 +1,8 @@
 package com.ghost.moneyflowbackend.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -44,5 +46,6 @@ public class BusBudgetItem {
      * 删除标志
      */
     @TableLogic
+    @TableField(fill = FieldFill.INSERT)
     private Integer delFlag;
 }
