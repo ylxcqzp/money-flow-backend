@@ -203,6 +203,11 @@ public class BusRecurringRuleServiceImpl extends ServiceImpl<BusRecurringRuleMap
         return generateTransactionsByRules(rules);
     }
 
+    /**
+     * 生成所有用户今日应执行的周期性交易
+     *
+     * @return 生成的交易记录列表
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<TransactionVO> generateAllTransactions() {

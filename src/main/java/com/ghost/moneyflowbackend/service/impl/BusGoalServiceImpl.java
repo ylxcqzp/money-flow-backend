@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 储蓄目标业务服务实现
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -35,6 +38,11 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
 
     private final BusGoalRecordMapper busGoalRecordMapper;
 
+    /**
+     * 获取当前用户的目标列表
+     *
+     * @return 目标列表
+     */
     @Override
     public List<GoalVO> listGoals() {
         Long userId = SecurityUtils.getCurrentUserId();
@@ -50,6 +58,12 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
         return result;
     }
 
+    /**
+     * 创建储蓄目标
+     *
+     * @param request 创建参数
+     * @return 创建后的目标信息
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public GoalVO createGoal(GoalCreateRequest request) {
@@ -73,6 +87,13 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
         return toVO(goal);
     }
 
+    /**
+     * 更新储蓄目标
+     *
+     * @param goalId 目标ID
+     * @param request 更新参数
+     * @return 更新后的目标信息
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public GoalVO updateGoal(Long goalId, GoalUpdateRequest request) {
@@ -115,6 +136,11 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
         return toVO(goal);
     }
 
+    /**
+     * 删除储蓄目标
+     *
+     * @param goalId 目标ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteGoal(Long goalId) {
@@ -127,6 +153,13 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
         }
     }
 
+    /**
+     * 新增目标存取记录并更新目标金额
+     *
+     * @param goalId 目标ID
+     * @param request 存取记录参数
+     * @return 更新后的目标信息
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public GoalVO createRecord(Long goalId, GoalRecordCreateRequest request) {
@@ -165,6 +198,13 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
         return toVO(goal);
     }
 
+    /**
+     * 获取目标并校验权限
+     *
+     * @param userId 用户ID
+     * @param goalId 目标ID
+     * @return 目标实体
+     */
     private BusGoal getGoal(Long userId, Long goalId) {
         BusGoal goal = getById(goalId);
         if (goal == null || goal.getDelFlag() != null && goal.getDelFlag() == 1) {
@@ -176,24 +216,45 @@ public class BusGoalServiceImpl extends ServiceImpl<BusGoalMapper, BusGoal> impl
         return goal;
     }
 
+    /**
+     * 校验目标名称
+     *
+     * @param name 目标名称
+     */
     private void validateName(String name) {
         if (!StringUtils.hasText(name)) {
             throw new BusinessException(ErrorCode.INVALID_PARAM, "目标名称不能为空");
         }
     }
 
+    /**
+     * 校验目标金额
+     *
+     * @param amount 目标金额
+     */
     private void validateTargetAmount(BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException(ErrorCode.INVALID_PARAM, "目标金额必须大于0");
         }
     }
 
+    /**
+     * 校验目标状态
+     *
+     * @param status 目标状态
+     */
     private void validateStatus(String status) {
         if (!StringUtils.hasText(status) || !ALLOWED_STATUSES.contains(status)) {
             throw new BusinessException(ErrorCode.INVALID_PARAM, "目标状态不合法");
         }
     }
 
+    /**
+     * 转换目标实体为视图对象
+     *
+     * @param goal 目标实体
+     * @return 目标视图对象
+     */
     private GoalVO toVO(BusGoal goal) {
         GoalVO vo = new GoalVO();
         vo.setId(goal.getId());

@@ -32,6 +32,12 @@ import java.util.Map;
 public class BusCategoryServiceImpl extends ServiceImpl<BusCategoryMapper, BusCategory> implements BusCategoryService {
     private final BusTransactionMapper busTransactionMapper;
 
+    /**
+     * 获取分类列表，并构建父子层级结构
+     *
+     * @param type 分类类型（可选）
+     * @return 分类树列表
+     */
     @Override
     public List<CategoryVO> listCategories(String type) {
         Long userId = SecurityUtils.getCurrentUserId();
@@ -65,6 +71,12 @@ public class BusCategoryServiceImpl extends ServiceImpl<BusCategoryMapper, BusCa
         return roots;
     }
 
+    /**
+     * 创建分类
+     *
+     * @param request 创建参数
+     * @return 创建后的分类信息
+     */
     @Override
     public CategoryVO createCategory(CategoryCreateRequest request) {
         Long userId = SecurityUtils.getCurrentUserId();
@@ -92,6 +104,13 @@ public class BusCategoryServiceImpl extends ServiceImpl<BusCategoryMapper, BusCa
         return toCategoryVO(category);
     }
 
+    /**
+     * 更新分类
+     *
+     * @param categoryId 分类ID
+     * @param request 更新参数
+     * @return 更新后的分类信息
+     */
     @Override
     public CategoryVO updateCategory(Long categoryId, CategoryUpdateRequest request) {
         Long userId = SecurityUtils.getCurrentUserId();
@@ -135,6 +154,11 @@ public class BusCategoryServiceImpl extends ServiceImpl<BusCategoryMapper, BusCa
         return toCategoryVO(category);
     }
 
+    /**
+     * 删除分类
+     *
+     * @param categoryId 分类ID
+     */
     @Override
     public void deleteCategory(Long categoryId) {
         Long userId = SecurityUtils.getCurrentUserId();
@@ -156,6 +180,13 @@ public class BusCategoryServiceImpl extends ServiceImpl<BusCategoryMapper, BusCa
         }
     }
 
+    /**
+     * 获取用户自定义分类并校验权限
+     *
+     * @param userId 用户ID
+     * @param categoryId 分类ID
+     * @return 分类实体
+     */
     private BusCategory getUserCategory(Long userId, Long categoryId) {
         BusCategory category = getById(categoryId);
         if (category == null || category.getDelFlag() != null && category.getDelFlag() == 1) {
@@ -170,6 +201,12 @@ public class BusCategoryServiceImpl extends ServiceImpl<BusCategoryMapper, BusCa
         return category;
     }
 
+    /**
+     * 转换分类实体为视图对象
+     *
+     * @param category 分类实体
+     * @return 分类视图对象
+     */
     private CategoryVO toCategoryVO(BusCategory category) {
         CategoryVO vo = new CategoryVO();
         vo.setId(category.getId());

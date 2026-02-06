@@ -11,6 +11,11 @@ public class BusTransactionTagController {
 
     private final BusTransactionTagService busTransactionTagService;
 
+    /**
+     * 构造方法
+     *
+     * @param busTransactionTagService 交易标签关联业务服务
+     */
     public BusTransactionTagController(BusTransactionTagService busTransactionTagService) {
         this.busTransactionTagService = busTransactionTagService;
     }

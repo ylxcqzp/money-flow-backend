@@ -19,16 +19,33 @@ public class BusBudgetController {
 
     private final BusBudgetService busBudgetService;
 
+    /**
+     * 构造方法
+     *
+     * @param busBudgetService 预算业务服务
+     */
     public BusBudgetController(BusBudgetService busBudgetService) {
         this.busBudgetService = busBudgetService;
     }
 
+    /**
+     * 获取月度预算
+     *
+     * @param month 月份（yyyy-MM）
+     * @return 月度预算信息
+     */
     @Operation(summary = "获取月度预算")
     @GetMapping
     public Result<BudgetVO> getBudget(@RequestParam("month") @NotBlank(message = "月份不能为空") String month) {
         return Result.ok(busBudgetService.getBudget(month));
     }
 
+    /**
+     * 设置或更新预算
+     *
+     * @param request 预算保存参数
+     * @return 保存后的预算信息
+     */
     @Operation(summary = "设置/更新预算")
     @PostMapping
     public Result<BudgetVO> save(@Valid @RequestBody BudgetSaveRequest request) {

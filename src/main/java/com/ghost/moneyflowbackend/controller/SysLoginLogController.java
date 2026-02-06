@@ -11,6 +11,11 @@ public class SysLoginLogController {
 
     private final SysLoginLogService sysLoginLogService;
 
+    /**
+     * 构造方法
+     *
+     * @param sysLoginLogService 登录日志业务服务
+     */
     public SysLoginLogController(SysLoginLogService sysLoginLogService) {
         this.sysLoginLogService = sysLoginLogService;
     }

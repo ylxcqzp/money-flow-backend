@@ -22,22 +22,45 @@ public class BusAccountController {
 
     private final BusAccountService busAccountService;
 
+    /**
+     * 构造方法
+     *
+     * @param busAccountService 账户业务服务
+     */
     public BusAccountController(BusAccountService busAccountService) {
         this.busAccountService = busAccountService;
     }
 
+    /**
+     * 获取账户列表
+     *
+     * @return 账户列表
+     */
     @Operation(summary = "获取账户列表")
     @GetMapping
     public Result<List<AccountVO>> list() {
         return Result.ok(busAccountService.listAccounts());
     }
 
+    /**
+     * 创建账户
+     *
+     * @param request 创建参数
+     * @return 创建后的账户信息
+     */
     @Operation(summary = "创建账户")
     @PostMapping
     public Result<AccountVO> create(@Valid @RequestBody AccountCreateRequest request) {
         return Result.ok(busAccountService.createAccount(request));
     }
 
+    /**
+     * 更新账户
+     *
+     * @param id 账户ID
+     * @param request 更新参数
+     * @return 更新后的账户信息
+     */
     @Operation(summary = "更新账户")
     @PutMapping("/{id}")
     public Result<AccountVO> update(@PathVariable("id") @NotNull(message = "账户ID不能为空") Long id,
@@ -45,6 +68,12 @@ public class BusAccountController {
         return Result.ok(busAccountService.updateAccount(id, request));
     }
 
+    /**
+     * 删除账户
+     *
+     * @param id 账户ID
+     * @return 删除结果
+     */
     @Operation(summary = "删除账户")
     @DeleteMapping("/{id}")
     public Result<Void> delete(@PathVariable("id") @NotNull(message = "账户ID不能为空") Long id) {

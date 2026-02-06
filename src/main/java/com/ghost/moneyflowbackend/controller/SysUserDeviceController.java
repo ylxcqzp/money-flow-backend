@@ -11,6 +11,11 @@ public class SysUserDeviceController {
 
     private final SysUserDeviceService sysUserDeviceService;
 
+    /**
+     * 构造方法
+     *
+     * @param sysUserDeviceService 用户设备业务服务
+     */
     public SysUserDeviceController(SysUserDeviceService sysUserDeviceService) {
         this.sysUserDeviceService = sysUserDeviceService;
     }

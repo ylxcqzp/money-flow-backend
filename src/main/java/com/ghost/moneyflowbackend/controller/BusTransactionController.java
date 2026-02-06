@@ -24,10 +24,26 @@ public class BusTransactionController {
 
     private final BusTransactionService busTransactionService;
 
+    /**
+     * 构造方法
+     *
+     * @param busTransactionService 交易明细业务服务
+     */
     public BusTransactionController(BusTransactionService busTransactionService) {
         this.busTransactionService = busTransactionService;
     }
 
+    /**
+     * 获取交易列表
+     *
+     * @param startDate 开始日期（可选）
+     * @param endDate 结束日期（可选）
+     * @param type 交易类型（可选）
+     * @param categoryId 分类ID（可选）
+     * @param accountId 账户ID（可选）
+     * @param tags 标签列表，逗号分隔（可选）
+     * @return 交易列表
+     */
     @Operation(summary = "获取交易列表")
     @GetMapping
     public Result<List<TransactionVO>> list(@RequestParam(value = "startDate", required = false)
@@ -45,12 +61,25 @@ public class BusTransactionController {
         return Result.ok(busTransactionService.listTransactions(startDate, endDate, type, categoryId, accountId, tagList));
     }
 
+    /**
+     * 创建交易
+     *
+     * @param request 创建参数
+     * @return 创建后的交易信息
+     */
     @Operation(summary = "创建交易")
     @PostMapping
     public Result<TransactionVO> create(@Valid @RequestBody TransactionCreateRequest request) {
         return Result.ok(busTransactionService.createTransaction(request));
     }
 
+    /**
+     * 更新交易
+     *
+     * @param id 交易ID
+     * @param request 更新参数
+     * @return 更新后的交易信息
+     */
     @Operation(summary = "更新交易")
     @PutMapping("/{id}")
     public Result<TransactionVO> update(@PathVariable("id") @NotNull(message = "交易ID不能为空") Long id,
@@ -58,6 +87,12 @@ public class BusTransactionController {
         return Result.ok(busTransactionService.updateTransaction(id, request));
     }
 
+    /**
+     * 删除交易
+     *
+     * @param id 交易ID
+     * @return 删除结果
+     */
     @Operation(summary = "删除交易")
     @DeleteMapping("/{id}")
     public Result<Void> delete(@PathVariable("id") @NotNull(message = "交易ID不能为空") Long id) {

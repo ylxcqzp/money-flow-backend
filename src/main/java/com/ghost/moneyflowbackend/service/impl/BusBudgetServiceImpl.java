@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 预算业务服务实现
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -35,6 +38,12 @@ public class BusBudgetServiceImpl extends ServiceImpl<BusBudgetMapper, BusBudget
     private final BusBudgetItemMapper busBudgetItemMapper;
     private final BusCategoryMapper busCategoryMapper;
 
+    /**
+     * 获取指定月份预算信息
+     *
+     * @param month 月份（yyyy-MM）
+     * @return 预算信息
+     */
     @Override
     public BudgetVO getBudget(String month) {
         Long userId = SecurityUtils.getCurrentUserId();
@@ -55,6 +64,12 @@ public class BusBudgetServiceImpl extends ServiceImpl<BusBudgetMapper, BusBudget
         return vo;
     }
 
+    /**
+     * 保存或更新预算信息
+     *
+     * @param request 预算保存参数
+     * @return 保存后的预算信息
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BudgetVO saveBudget(BudgetSaveRequest request) {
@@ -95,6 +110,13 @@ public class BusBudgetServiceImpl extends ServiceImpl<BusBudgetMapper, BusBudget
         return vo;
     }
 
+    /**
+     * 获取预算实体对象
+     *
+     * @param userId 用户ID
+     * @param month 月份（yyyy-MM）
+     * @return 预算实体
+     */
     private BusBudget getBudgetEntity(Long userId, String month) {
         LambdaQueryWrapper<BusBudget> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(BusBudget::getUserId, userId)
@@ -104,6 +126,12 @@ public class BusBudgetServiceImpl extends ServiceImpl<BusBudgetMapper, BusBudget
         return getOne(wrapper, false);
     }
 
+    /**
+     * 加载预算明细到分类金额映射
+     *
+     * @param budgetId 预算ID
+     * @return 分类预算金额映射
+     */
     private Map<Long, BigDecimal> loadBudgetItems(Long budgetId) {
         LambdaQueryWrapper<BusBudgetItem> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(BusBudgetItem::getBudgetId, budgetId)
@@ -116,6 +144,13 @@ public class BusBudgetServiceImpl extends ServiceImpl<BusBudgetMapper, BusBudget
         return result;
     }
 
+    /**
+     * 保存或更新预算分类明细
+     *
+     * @param userId 用户ID
+     * @param budgetId 预算ID
+     * @param categories 分类预算映射
+     */
     private void upsertBudgetItems(Long userId, Long budgetId, Map<Long, BigDecimal> categories) {
         LambdaQueryWrapper<BusBudgetItem> deleteWrapper = new LambdaQueryWrapper<>();
         deleteWrapper.eq(BusBudgetItem::getBudgetId, budgetId);
@@ -150,6 +185,11 @@ public class BusBudgetServiceImpl extends ServiceImpl<BusBudgetMapper, BusBudget
         }
     }
 
+    /**
+     * 校验月份格式
+     *
+     * @param month 月份（yyyy-MM）
+     */
     private void validateMonth(String month) {
         try {
             YearMonth.parse(month);

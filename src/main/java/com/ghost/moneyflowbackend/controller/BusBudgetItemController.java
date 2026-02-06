@@ -11,6 +11,11 @@ public class BusBudgetItemController {
 
     private final BusBudgetItemService busBudgetItemService;
 
+    /**
+     * 构造方法
+     *
+     * @param busBudgetItemService 预算明细业务服务
+     */
     public BusBudgetItemController(BusBudgetItemService busBudgetItemService) {
         this.busBudgetItemService = busBudgetItemService;
     }

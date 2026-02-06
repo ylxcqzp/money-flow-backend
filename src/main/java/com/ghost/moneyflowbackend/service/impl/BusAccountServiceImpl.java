@@ -30,6 +30,11 @@ import java.util.List;
 public class BusAccountServiceImpl extends ServiceImpl<BusAccountMapper, BusAccount> implements BusAccountService {
     private final BusTransactionMapper busTransactionMapper;
 
+    /**
+     * 获取当前用户的账户列表，并计算每个账户的实时余额
+     *
+     * @return 账户列表
+     */
     @Override
     public List<AccountVO> listAccounts() {
         Long userId = SecurityUtils.getCurrentUserId();
@@ -47,6 +52,12 @@ public class BusAccountServiceImpl extends ServiceImpl<BusAccountMapper, BusAcco
         return result;
     }
 
+    /**
+     * 创建新账户
+     *
+     * @param request 创建参数
+     * @return 创建后的账户信息
+     */
     @Override
     public AccountVO createAccount(AccountCreateRequest request) {
         Long userId = SecurityUtils.getCurrentUserId();
@@ -67,6 +78,13 @@ public class BusAccountServiceImpl extends ServiceImpl<BusAccountMapper, BusAcco
         return vo;
     }
 
+    /**
+     * 更新账户信息
+     *
+     * @param accountId 账户ID
+     * @param request 更新参数
+     * @return 更新后的账户信息
+     */
     @Override
     public AccountVO updateAccount(Long accountId, AccountUpdateRequest request) {
         Long userId = SecurityUtils.getCurrentUserId();
@@ -100,6 +118,11 @@ public class BusAccountServiceImpl extends ServiceImpl<BusAccountMapper, BusAcco
         return vo;
     }
 
+    /**
+     * 删除账户
+     *
+     * @param accountId 账户ID
+     */
     @Override
     public void deleteAccount(Long accountId) {
         Long userId = SecurityUtils.getCurrentUserId();
@@ -117,6 +140,13 @@ public class BusAccountServiceImpl extends ServiceImpl<BusAccountMapper, BusAcco
         }
     }
 
+    /**
+     * 根据ID获取账户并进行权限校验
+     *
+     * @param userId 当前用户ID
+     * @param accountId 账户ID
+     * @return 账户实体
+     */
     private BusAccount getAccountById(Long userId, Long accountId) {
         BusAccount account = getById(accountId);
         if (account == null || account.getDelFlag() != null && account.getDelFlag() == 1) {
@@ -128,6 +158,12 @@ public class BusAccountServiceImpl extends ServiceImpl<BusAccountMapper, BusAcco
         return account;
     }
 
+    /**
+     * 计算账户实时余额
+     *
+     * @param account 账户实体
+     * @return 实时余额
+     */
     private BigDecimal calculateCurrentBalance(BusAccount account) {
         Long userId = account.getUserId();
         Long accountId = account.getId();
@@ -139,10 +175,22 @@ public class BusAccountServiceImpl extends ServiceImpl<BusAccountMapper, BusAcco
         return initial.add(income).add(transferIn).subtract(expense).subtract(transferOut);
     }
 
+    /**
+     * 空值保护，避免金额计算出现空指针
+     *
+     * @param value 金额
+     * @return 非空金额
+     */
     private BigDecimal nullSafe(BigDecimal value) {
         return value == null ? BigDecimal.ZERO : value;
     }
 
+    /**
+     * 转换账户实体为视图对象
+     *
+     * @param account 账户实体
+     * @return 账户视图对象
+     */
     private AccountVO toAccountVO(BusAccount account) {
         AccountVO vo = new AccountVO();
         vo.setId(account.getId());

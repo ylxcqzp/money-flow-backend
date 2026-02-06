@@ -11,6 +11,11 @@ public class BusTagController {
 
     private final BusTagService busTagService;
 
+    /**
+     * 构造方法
+     *
+     * @param busTagService 标签业务服务
+     */
     public BusTagController(BusTagService busTagService) {
         this.busTagService = busTagService;
     }

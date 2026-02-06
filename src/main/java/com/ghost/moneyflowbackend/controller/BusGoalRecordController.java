@@ -11,6 +11,11 @@ public class BusGoalRecordController {
 
     private final BusGoalRecordService busGoalRecordService;
 
+    /**
+     * 构造方法
+     *
+     * @param busGoalRecordService 目标记录业务服务
+     */
     public BusGoalRecordController(BusGoalRecordService busGoalRecordService) {
         this.busGoalRecordService = busGoalRecordService;
     }

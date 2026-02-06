@@ -11,6 +11,11 @@ public class SysUserController {
 
     private final SysUserService sysUserService;
 
+    /**
+     * 构造方法
+     *
+     * @param sysUserService 用户业务服务
+     */
     public SysUserController(SysUserService sysUserService) {
         this.sysUserService = sysUserService;
     }

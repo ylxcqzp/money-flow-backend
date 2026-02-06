@@ -6,6 +6,9 @@ import com.ghost.moneyflowbackend.mapper.BusGoalRecordMapper;
 import com.ghost.moneyflowbackend.service.BusGoalRecordService;
 import org.springframework.stereotype.Service;
 
+/**
+ * 目标记录业务服务实现
+ */
 @Service
 public class BusGoalRecordServiceImpl extends ServiceImpl<BusGoalRecordMapper, BusGoalRecord> implements BusGoalRecordService {
 }

@@ -52,6 +52,17 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
     private final BusTransactionTagMapper busTransactionTagMapper;
     private final BusTagMapper busTagMapper;
 
+    /**
+     * 查询交易列表，支持日期、类型、分类、账户与标签过滤
+     *
+     * @param startDate 开始日期
+     * @param endDate 结束日期
+     * @param type 交易类型
+     * @param categoryId 分类ID
+     * @param accountId 账户ID
+     * @param tags 标签列表
+     * @return 交易列表
+     */
     @Override
     public List<TransactionVO> listTransactions(LocalDate startDate, LocalDate endDate, String type,
             Long categoryId, Long accountId, List<String> tags) {
@@ -114,6 +125,12 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         return result;
     }
 
+    /**
+     * 创建交易记录
+     *
+     * @param request 创建参数
+     * @return 创建后的交易信息
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public TransactionVO createTransaction(TransactionCreateRequest request) {
@@ -164,6 +181,13 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         return vo;
     }
 
+    /**
+     * 更新交易记录
+     *
+     * @param transactionId 交易ID
+     * @param request 更新参数
+     * @return 更新后的交易信息
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public TransactionVO updateTransaction(Long transactionId, TransactionUpdateRequest request) {
@@ -225,6 +249,11 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         return vo;
     }
 
+    /**
+     * 删除交易记录
+     *
+     * @param transactionId 交易ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteTransaction(Long transactionId) {
@@ -240,6 +269,13 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         busTransactionTagMapper.delete(wrapper);
     }
 
+    /**
+     * 获取交易并进行权限校验
+     *
+     * @param userId 用户ID
+     * @param transactionId 交易ID
+     * @return 交易实体
+     */
     private BusTransaction getTransaction(Long userId, Long transactionId) {
         BusTransaction transaction = getById(transactionId);
         if (transaction == null || transaction.getDelFlag() != null && transaction.getDelFlag() == 1) {
@@ -251,6 +287,11 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         return transaction;
     }
 
+    /**
+     * 校验交易类型
+     *
+     * @param type 交易类型
+     */
     private void validateType(String type) {
         if (!StringUtils.hasText(type)) {
             throw new BusinessException(ErrorCode.INVALID_PARAM, "交易类型不能为空");
@@ -260,18 +301,35 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         }
     }
 
+    /**
+     * 校验金额
+     *
+     * @param amount 金额
+     */
     private void validateAmount(BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException(ErrorCode.INVALID_PARAM, "金额必须大于0");
         }
     }
 
+    /**
+     * 校验日期
+     *
+     * @param date 交易日期
+     */
     private void validateDate(LocalDate date) {
         if (date == null) {
             throw new BusinessException(ErrorCode.INVALID_PARAM, "发生时间不能为空");
         }
     }
 
+    /**
+     * 获取账户并校验权限
+     *
+     * @param userId 用户ID
+     * @param accountId 账户ID
+     * @return 账户实体
+     */
     private BusAccount getAccount(Long userId, Long accountId) {
         BusAccount account = busAccountMapper.selectById(accountId);
         if (account == null || account.getDelFlag() != null && account.getDelFlag() == 1) {
@@ -283,6 +341,14 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         return account;
     }
 
+    /**
+     * 获取分类并校验权限与类型
+     *
+     * @param userId 用户ID
+     * @param categoryId 分类ID
+     * @param type 交易类型
+     * @return 分类实体
+     */
     private BusCategory getCategory(Long userId, Long categoryId, String type) {
         BusCategory category = busCategoryMapper.selectById(categoryId);
         if (category == null || category.getDelFlag() != null && category.getDelFlag() == 1) {
@@ -297,6 +363,13 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         return category;
     }
 
+    /**
+     * 更新交易与标签关联关系
+     *
+     * @param userId 用户ID
+     * @param transactionId 交易ID
+     * @param tags 标签列表
+     */
     private void updateTags(Long userId, Long transactionId, List<String> tags) {
         LambdaQueryWrapper<BusTransactionTag> deleteWrapper = new LambdaQueryWrapper<>();
         deleteWrapper.eq(BusTransactionTag::getTransactionId, transactionId);
@@ -350,6 +423,12 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         }
     }
 
+    /**
+     * 构建交易ID到标签名称列表的映射
+     *
+     * @param transactions 交易列表
+     * @return 标签映射
+     */
     private Map<Long, List<String>> buildTagMap(List<BusTransaction> transactions) {
         if (CollectionUtils.isEmpty(transactions)) {
             return Collections.emptyMap();
@@ -375,6 +454,12 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         return result;
     }
 
+    /**
+     * 根据交易ID加载标签名称列表
+     *
+     * @param transactionId 交易ID
+     * @return 标签名称列表
+     */
     private List<String> loadTagNamesByTransactionId(Long transactionId) {
         LambdaQueryWrapper<BusTransactionTag> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(BusTransactionTag::getTransactionId, transactionId);
@@ -387,6 +472,12 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         return tags.stream().map(BusTag::getName).filter(StringUtils::hasText).collect(Collectors.toList());
     }
 
+    /**
+     * 转换交易实体为视图对象
+     *
+     * @param transaction 交易实体
+     * @return 交易视图对象
+     */
     private TransactionVO toTransactionVO(BusTransaction transaction) {
         TransactionVO vo = new TransactionVO();
         vo.setId(transaction.getId());
