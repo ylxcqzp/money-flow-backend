@@ -1,5 +1,6 @@
 package com.ghost.moneyflowbackend.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -25,4 +26,7 @@ public class BusTransactionTag {
     @NotNull(message = "标签ID不能为空")
     @TableField("tag_id")
     private Long tagId;
+
+    @TableField(fill = FieldFill.INSERT)
+    private Integer delFlag;
 }

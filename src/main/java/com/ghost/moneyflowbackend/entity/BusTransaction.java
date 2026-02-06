@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -58,7 +59,7 @@ public class BusTransaction {
      * 发生时间
      */
     @NotNull(message = "发生时间不能为空")
-    private LocalDateTime date;
+    private LocalDate date;
 
     /**
      * 分类ID

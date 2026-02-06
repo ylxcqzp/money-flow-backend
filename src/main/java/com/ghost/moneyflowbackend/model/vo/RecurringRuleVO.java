@@ -14,6 +14,7 @@ public class RecurringRuleVO {
     private Long categoryId;
     private Long accountId;
     private String frequency;
+    private String description;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @JsonFormat(pattern = "yyyy-MM-dd")

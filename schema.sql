@@ -41,6 +41,7 @@ CREATE TABLE `sys_login_log` (
   `client_type` VARCHAR(20) DEFAULT '' COMMENT '客户端类型（web, android, ios, pc）',
   `device_id` VARCHAR(100) DEFAULT '' COMMENT '设备唯一标识',
   `status` TINYINT(1) DEFAULT 0 COMMENT '登录状态（0成功 1失败）',
+  `del_flag` TINYINT(1) DEFAULT 0 COMMENT '删除标志',
   `msg` VARCHAR(255) DEFAULT '' COMMENT '提示消息',
   `login_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '访问时间',
   PRIMARY KEY (`id`),
@@ -62,6 +63,7 @@ CREATE TABLE `sys_user_device` (
   `last_login_ip` VARCHAR(128) DEFAULT NULL COMMENT '最后登录IP',
   `last_login_time` DATETIME DEFAULT NULL COMMENT '最后登录时间',
   `status` TINYINT(1) DEFAULT 0 COMMENT '状态（0正常 1禁用）',
+  `del_flag` TINYINT(1) DEFAULT 0 COMMENT '删除标志',
   `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '首次绑定时间',
   `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
@@ -124,7 +126,7 @@ CREATE TABLE `bus_transaction` (
   `amount` DECIMAL(15, 2) NOT NULL COMMENT '本位币金额',
   `currency` VARCHAR(10) DEFAULT 'CNY' COMMENT '原币种',
   `orig_amount` DECIMAL(15, 2) DEFAULT NULL COMMENT '原币种金额',
-  `date` DATETIME NOT NULL COMMENT '发生时间',
+  `date` DATE NOT NULL COMMENT '发生时间',
   `category_id` BIGINT UNSIGNED DEFAULT NULL COMMENT '分类ID',
   `account_id` BIGINT UNSIGNED NOT NULL COMMENT '主账户ID(支出/转出)',
   `target_account_id` BIGINT UNSIGNED DEFAULT NULL COMMENT '目标账户ID(转账专用)',
@@ -162,6 +164,7 @@ DROP TABLE IF EXISTS `bus_transaction_tag`;
 CREATE TABLE `bus_transaction_tag` (
   `transaction_id` BIGINT UNSIGNED NOT NULL COMMENT '交易ID',
   `tag_id` BIGINT UNSIGNED NOT NULL COMMENT '标签ID',
+  `del_flag` TINYINT(1) DEFAULT 0 COMMENT '删除标志',
   PRIMARY KEY (`transaction_id`, `tag_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='交易标签关联表';
 
@@ -208,6 +211,7 @@ CREATE TABLE `bus_recurring_rule` (
   `amount` DECIMAL(15, 2) NOT NULL COMMENT '金额',
   `category_id` BIGINT UNSIGNED NOT NULL COMMENT '分类ID',
   `account_id` BIGINT UNSIGNED NOT NULL COMMENT '账户ID',
+  `description` VARCHAR(200) DEFAULT NULL COMMENT '描述',
   `frequency` VARCHAR(20) NOT NULL COMMENT '频率(daily, weekly, monthly, yearly)',
   `start_date` DATE NOT NULL COMMENT '开始日期',
   `next_execution_date` DATE NOT NULL COMMENT '下次执行日期',
@@ -253,6 +257,7 @@ CREATE TABLE `bus_goal_record` (
   `goal_id` BIGINT UNSIGNED NOT NULL COMMENT '目标ID',
   `amount` DECIMAL(15, 2) NOT NULL COMMENT '操作金额',
   `operate_date` DATE NOT NULL COMMENT '日期',
+  `del_flag` TINYINT(1) DEFAULT 0 COMMENT '删除标志',
   `create_by` BIGINT DEFAULT NULL COMMENT '操作人',
   `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '记录时间',
   PRIMARY KEY (`id`),

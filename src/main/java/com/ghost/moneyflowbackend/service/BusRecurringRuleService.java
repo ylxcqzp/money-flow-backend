@@ -19,4 +19,6 @@ public interface BusRecurringRuleService extends IService<BusRecurringRule> {
     void deleteRule(Long ruleId);
 
     List<TransactionVO> generateTransactions();
+
+    List<TransactionVO> generateAllTransactions();
 }

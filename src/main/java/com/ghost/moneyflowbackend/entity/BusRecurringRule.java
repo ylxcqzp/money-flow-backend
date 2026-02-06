@@ -57,6 +57,8 @@ public class BusRecurringRule {
     @NotNull(message = "账户ID不能为空")
     private Long accountId;
 
+    private String description;
+
     /**
      * 频率(daily, weekly, monthly, yearly)
      */

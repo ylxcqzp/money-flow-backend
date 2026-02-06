@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -12,7 +12,7 @@ public class TransactionUpdateRequest {
     private String type;
     private BigDecimal amount;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime date;
+    private LocalDate date;
     private Long categoryId;
     private Long accountId;
     private Long targetAccountId;

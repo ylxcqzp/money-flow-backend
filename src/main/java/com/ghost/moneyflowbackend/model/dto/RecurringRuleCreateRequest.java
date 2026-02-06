@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -30,6 +31,9 @@ public class RecurringRuleCreateRequest {
 
     @NotNull(message = "账户ID不能为空")
     private Long accountId;
+
+    @Size(max = 200, message = "描述长度不能超过200")
+    private String description;
 
     private Integer status;
 }

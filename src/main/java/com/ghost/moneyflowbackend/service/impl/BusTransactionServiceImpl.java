@@ -27,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +53,7 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
     private final BusTagMapper busTagMapper;
 
     @Override
-    public List<TransactionVO> listTransactions(LocalDateTime startDate, LocalDateTime endDate, String type,
+    public List<TransactionVO> listTransactions(LocalDate startDate, LocalDate endDate, String type,
             Long categoryId, Long accountId, List<String> tags) {
         Long userId = SecurityUtils.getCurrentUserId();
         LambdaQueryWrapper<BusTransaction> wrapper = new LambdaQueryWrapper<>();
@@ -265,7 +266,7 @@ public class BusTransactionServiceImpl extends ServiceImpl<BusTransactionMapper,
         }
     }
 
-    private void validateDate(LocalDateTime date) {
+    private void validateDate(LocalDate date) {
         if (date == null) {
             throw new BusinessException(ErrorCode.INVALID_PARAM, "发生时间不能为空");
         }
